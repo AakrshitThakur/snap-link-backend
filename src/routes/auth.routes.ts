@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
 import { User } from "../models/auth.model.js";
-import type { SignupUser, SigninUser } from "../custom-types/auth.js";
 import {
   doesUsernameExists,
   doesEmailExists,

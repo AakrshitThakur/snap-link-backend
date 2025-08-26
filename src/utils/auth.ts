@@ -1,5 +1,4 @@
 import type { Response } from "express";
-import type { SignupUser, SigninUser } from "../custom-types/auth.js";
 
 // the previous character class i.e. [a-zA-Z0-9_] must repeat at least 3 times and at most 20
 const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;

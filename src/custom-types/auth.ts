@@ -1,9 +1,7 @@
-interface SignupUser {
-  username: string;
-  email: string;
-  password: string;
+import type { Types } from "mongoose";
+
+interface UserCredentials {
+  id: Types.ObjectId;
 }
 
-type SigninUser = Pick<SignupUser, "email" | "password">;
-
-export type { SignupUser, SigninUser };
+export type { UserCredentials };
