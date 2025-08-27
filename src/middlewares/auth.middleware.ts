@@ -12,7 +12,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (!jwt) {
     return res
       .status(401)
-      .json({ msg: "Please sign in or create an account to continue" });
+      .json({ message: "Please sign in or create an account to continue" });
   }
 
   jsonwebtoken.verify(
@@ -23,7 +23,12 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
         console.error(error);
         return res.status(401).json({ message: error.message });
       }
-      if (typeof payload === "object") {
+      if (typeof payload === undefined) {
+        return res.status(403).json({
+          message:
+            "Invalid user ID. Please sign in or sign up with a new account.",
+        });
+      } else if (typeof payload === "object") {
         req.userCredentials = payload as UserCredentials; // type assertion
         next();
       } else {

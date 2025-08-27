@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
-import type { ContentType } from "../custom-types/content.js";
+import { Types } from "mongoose";
 
 const ContentSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ["document", "tweet", "youtube", "link"],
+      enum: ["document", "image", "video", "audio", "article"],
       require: true,
     },
     url: { type: String, require: true },
-    title: { type: String, require: true },
-    tags: [{ type: String }],
+    title: { type: String, require: true, unique: true },
+    ownerId: { type: Types.ObjectId, ref: "User", require: true },
+    tagIds: [{ type: Types.ObjectId, ref: "Tag" }],
   },
   { timestamps: true }
 );
