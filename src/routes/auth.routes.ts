@@ -7,7 +7,7 @@ import {
   doesUsernameExists,
   doesEmailExists,
 } from "../queries/auth.queries.js";
-import { validateSignup, validateSignin } from "../utils/auth.js";
+import { validateSignup, validateSignin } from "../utils/auth.utils.js";
 import type { Request, Response } from "express";
 
 dotenv.config();

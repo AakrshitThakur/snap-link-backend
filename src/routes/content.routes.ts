@@ -5,7 +5,8 @@ import { Content } from "../models/content.model.js";
 import { User } from "../models/auth.model.js";
 import { Tag } from "../models/tag.model.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { validateContent } from "../utils/content.js";
+import { validateContent } from "../utils/content.utils.js";
+import type { escapeLeadingUnderscores } from "typescript";
 
 const router = express.Router();
 
@@ -247,9 +248,14 @@ router.put(
       });
 
       // Update a user's name by ID
-      const updatedContent = await User.findByIdAndUpdate(
+      const updatedContent = await Content.findByIdAndUpdate(
         contentId, // _id
-        { ...content, tagIds: ids }, // Update object
+        {
+          title: content.title,
+          url: content.url,
+          type: content.type,
+          tagIds: ids,
+        }, // Update object
         { new: true, runValidators: true } // obey schema rules
       );
 
@@ -267,6 +273,7 @@ router.put(
       if (err instanceof Error.CastError) {
         res.status(400).json({ message: "Invalid content ID format" });
       } else if (err instanceof Error.ValidationError) {
+        console.error(err.message);
         res.status(400).json({ message: "Validation failed" });
       } else if (err instanceof Error) {
         console.error("Error message:", err.message);
@@ -276,6 +283,78 @@ router.put(
         res.status(400).json({ message: err });
       }
       return;
+    }
+  }
+);
+
+router.delete(
+  "/:contentId/delete",
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      //validate content id from url params
+      const contentId = req.params.contentId;
+      if (!contentId || contentId?.length !== 24) {
+        res.status(400).json({ message: "Kindly provide a valid content ID" });
+        return;
+      }
+
+      const userCredentials = req.userCredentials;
+
+      // check if user exists
+      const user = await User.findById(userCredentials?.id);
+      if (!user) {
+        res
+          .status(401)
+          .json({ message: "Please sign in or create an account to continue" });
+        return;
+      }
+
+      // get content
+      const content = await Content.findById(contentId);
+      if (!content) {
+        res
+          .status(400)
+          .json({ message: "Requested content could not be found" });
+        return;
+      }
+
+      // check authorization
+      if (content.ownerId instanceof Types.ObjectId) {
+        if (content.ownerId.toString() !== user._id.toString()) {
+          res
+            .status(403)
+            .json({ message: "Not authorized to update this content" });
+          return;
+        }
+      } else {
+        res.status(500).json({ message: "Oops, something went wrong" });
+        return;
+      }
+
+      const deletedContent = await Content.findByIdAndDelete(contentId);
+
+      // error response
+      if (!deletedContent) {
+        res.status(500).json({ message: "Oops, something went wrong" });
+        return;
+      }
+
+      // success response
+      res
+        .status(200)
+        .json({ message: "Content successfully deleted" });
+    } catch (error: unknown) {
+      if (error instanceof Error.CastError) {
+        console.error(error.message);
+        res.status(400).json({ message: "Invalid content ID format" });
+      } else if (error instanceof Error) {
+        console.error(error.message);
+        res.status(400).json({ message: error.message });
+      } else {
+        console.error(error);
+        res.status(400).json({ message: error });
+      }
     }
   }
 );
