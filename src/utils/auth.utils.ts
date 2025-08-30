@@ -1,19 +1,11 @@
 import type { Response } from "express";
+import {
+  USERNAME_REGEX,
+  PASSWORD_REGEX,
+  EMAIL_REGEX,
+} from "./constants/auth.constants.js";
 
-// the previous character class i.e. [a-zA-Z0-9_] must repeat at least 3 times and at most 20
-const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-
-// [^\s@] = any character except whitespace and @
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// (?= ... ) is a lookahead.
-// It means: "there must be … somewhere in the string."
-// .*[A-Z] = any characters, followed by an uppercase letter (A–Z).
-// 👉 This ensures the string has at least one uppercase letter.
-const passwordRegex =
-  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,128}$/;
-
-function validateSignup(credentials: any, res: Response): boolean {
+function validateSignin(credentials: any, res: Response): boolean {
   if (!credentials) {
     res.status(403).json({
       message:
@@ -24,10 +16,10 @@ function validateSignup(credentials: any, res: Response): boolean {
 
   const errors: string[] = [];
 
-  if (!emailRegex.test(credentials.email)) {
+  if (!EMAIL_REGEX.test(credentials.email)) {
     errors.push("Invalid email format.");
   }
-  if (!passwordRegex.test(credentials.password)) {
+  if (!PASSWORD_REGEX.test(credentials.password)) {
     errors.push(
       "Password must be at least 8 characters, contain one uppercase and one number."
     );
@@ -43,7 +35,7 @@ function validateSignup(credentials: any, res: Response): boolean {
   return true;
 }
 
-function validateSignin(credentials: any, res: Response): boolean {
+function validateSignup(credentials: any, res: Response): boolean {
   if (!credentials) {
     res.status(403).json({
       message:
@@ -54,15 +46,15 @@ function validateSignin(credentials: any, res: Response): boolean {
 
   const errors: string[] = [];
 
-  if (!usernameRegex.test(credentials.username)) {
+  if (!USERNAME_REGEX.test(credentials.username)) {
     errors.push(
       "Username must be 3-20 characters, letters/numbers/underscores only."
     );
   }
-  if (!emailRegex.test(credentials.email)) {
+  if (!EMAIL_REGEX.test(credentials.email)) {
     errors.push("Invalid email format.");
   }
-  if (!passwordRegex.test(credentials.password)) {
+  if (!PASSWORD_REGEX.test(credentials.password)) {
     errors.push(
       "Password must be at least 8 characters, contain one uppercase and one number."
     );

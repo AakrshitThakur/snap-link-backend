@@ -9,6 +9,7 @@ import {
 } from "../queries/auth.queries.js";
 import { validateSignup, validateSignin } from "../utils/auth.utils.js";
 import type { Request, Response } from "express";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 dotenv.config();
 
@@ -132,5 +133,36 @@ router.delete("/signout", async (req: Request, res: Response) => {
     return;
   }
 });
+
+router.get(
+  "/isAuthenticated",
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userCredentials = req.userCredentials;
+
+      // check if user exists
+      const user = await User.findById(userCredentials?.id);
+      if (!user) {
+        // error response
+        res.status(401).json({ isAuthenticated: false });
+        return;
+      }
+
+      // success response
+      res.status(200).json({ isAuthenticated: true });
+      return;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error message:", err.message);
+        res.status(400).json({ message: err.message });
+      } else {
+        console.error("Unknown error:", err);
+        res.status(400).json({ message: err });
+      }
+      return;
+    }
+  }
+);
 
 export { router };

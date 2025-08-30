@@ -6,21 +6,24 @@ import { User } from "../models/auth.model.js";
 import { Tag } from "../models/tag.model.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validateContent } from "../utils/content.utils.js";
-import type { escapeLeadingUnderscores } from "typescript";
 
 const router = express.Router();
 
 router.get("/all", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userCredentials = req.userCredentials;
-    if (!userCredentials) {
+
+    // check if user exists
+    const user = await User.findById(userCredentials?.id);
+    if (!user) {
       res
         .status(401)
         .json({ message: "Please sign in or create an account to continue" });
       return;
     }
 
-    const contents = await Content.find({ ownerId: userCredentials.id });
+    // get all contents
+    const contents = await Content.find({ ownerId: user._id });
     res
       .status(200)
       .json({ message: "All contents have been received", contents });
@@ -341,9 +344,7 @@ router.delete(
       }
 
       // success response
-      res
-        .status(200)
-        .json({ message: "Content successfully deleted" });
+      res.status(200).json({ message: "Content successfully deleted" });
     } catch (error: unknown) {
       if (error instanceof Error.CastError) {
         console.error(error.message);
