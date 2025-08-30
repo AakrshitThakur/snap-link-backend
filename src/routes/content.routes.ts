@@ -23,7 +23,12 @@ router.get("/all", authMiddleware, async (req: Request, res: Response) => {
     }
 
     // get all contents
-    const contents = await Content.find({ ownerId: user._id });
+    const contents = await Content.find(
+      { ownerId: user._id },
+      "-__v"
+    ).populate({ path: "tagIds", select: "-_id -__v" });
+
+    // success response
     res
       .status(200)
       .json({ message: "All contents have been received", contents });

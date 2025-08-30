@@ -3,6 +3,7 @@ const CONTENT_TYPE: string[] = [
   "image",
   "video",
   "audio",
+  "website",
   "article",
   "others",
 ];
