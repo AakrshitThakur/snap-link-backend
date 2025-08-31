@@ -6,8 +6,43 @@ import { User } from "../models/auth.model.js";
 import { Tag } from "../models/tag.model.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validateContent } from "../utils/content.utils.js";
+import { FILTER_CONTENT_TYPE } from "../utils/constants/content.constants.js";
 
 const router = express.Router();
+
+// router.get("/all", authMiddleware, async (req: Request, res: Response) => {
+//   try {
+//     const userCredentials = req.userCredentials;
+
+//     // check if user exists
+//     const user = await User.findById(userCredentials?.id);
+//     if (!user) {
+//       res
+//         .status(401)
+//         .json({ message: "Please sign in or create an account to continue" });
+//       return;
+//     }
+
+//     // get all contents
+//     const contents = await Content.find({ ownerId: user._id }, "-__v").populate(
+//       { path: "tagIds", select: "-_id -__v" }
+//     );
+
+//     // success response
+//     res
+//       .status(200)
+//       .json({ message: "All contents have been received", contents });
+//   } catch (err: unknown) {
+//     if (err instanceof Error) {
+//       console.error("Error message:", err.message);
+//       res.status(400).json({ message: err.message });
+//     } else {
+//       console.error("Unknown error:", err);
+//       res.status(400).json({ message: err });
+//     }
+//     return;
+//   }
+// });
 
 router.get("/all", authMiddleware, async (req: Request, res: Response) => {
   try {
@@ -22,16 +57,38 @@ router.get("/all", authMiddleware, async (req: Request, res: Response) => {
       return;
     }
 
-    // get all contents
-    const contents = await Content.find(
-      { ownerId: user._id },
-      "-__v"
-    ).populate({ path: "tagIds", select: "-_id -__v" });
+    const type = req.query.type;
+    if (!type) {
+      // get all contents
+      const contents = await Content.find(
+        { ownerId: user._id },
+        "-__v"
+      ).populate({ path: "tagIds", select: "-_id -__v" });
 
-    // success response
+      // success response
+      res
+        .status(200)
+        .json({ message: "All contents have been received", contents });
+      return;
+    }
+    if (typeof type === "string" && FILTER_CONTENT_TYPE[type]) {
+      // get filtered content
+      const contents = await Content.find(
+        { ownerId: user._id, type: FILTER_CONTENT_TYPE[type] },
+        "-__v -ownerId"
+      ).populate({ path: "tagIds", select: "-_id -__v" });
+
+      // success response
+      res
+        .status(200)
+        .json({ message: "Filtered contents have been received", contents });
+      return;
+    }
+
+    // error response
     res
-      .status(200)
-      .json({ message: "All contents have been received", contents });
+      .status(400)
+      .json({ message: "Please provide a valid content type filter" });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("Error message:", err.message);

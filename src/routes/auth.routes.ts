@@ -135,7 +135,7 @@ router.delete("/signout", async (req: Request, res: Response) => {
 });
 
 router.get(
-  "/isAuthenticated",
+  "/is-authenticated",
   authMiddleware,
   async (req: Request, res: Response) => {
     try {
