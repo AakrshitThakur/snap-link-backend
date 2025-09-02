@@ -10,40 +10,7 @@ import { FILTER_CONTENT_TYPE } from "../utils/constants/content.constants.js";
 
 const router = express.Router();
 
-// router.get("/all", authMiddleware, async (req: Request, res: Response) => {
-//   try {
-//     const userCredentials = req.userCredentials;
-
-//     // check if user exists
-//     const user = await User.findById(userCredentials?.id);
-//     if (!user) {
-//       res
-//         .status(401)
-//         .json({ message: "Please sign in or create an account to continue" });
-//       return;
-//     }
-
-//     // get all contents
-//     const contents = await Content.find({ ownerId: user._id }, "-__v").populate(
-//       { path: "tagIds", select: "-_id -__v" }
-//     );
-
-//     // success response
-//     res
-//       .status(200)
-//       .json({ message: "All contents have been received", contents });
-//   } catch (err: unknown) {
-//     if (err instanceof Error) {
-//       console.error("Error message:", err.message);
-//       res.status(400).json({ message: err.message });
-//     } else {
-//       console.error("Unknown error:", err);
-//       res.status(400).json({ message: err });
-//     }
-//     return;
-//   }
-// });
-
+// get contents
 router.get("/all", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userCredentials = req.userCredentials;
@@ -201,7 +168,10 @@ router.get(
       }
 
       // get content
-      const content = await Content.findById(contentId).populate("tagIds");
+      const content = await Content.findById(contentId, "-__v").populate({
+        path: "tagIds",
+        select: "-_id -__v",
+      });
       if (!content) {
         res
           .status(400)

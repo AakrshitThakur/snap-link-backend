@@ -3,6 +3,7 @@ import { Link } from "../models/link.model.js";
 import { User } from "../models/auth.model.js";
 import { Content } from "../models/content.model.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { FILTER_CONTENT_TYPE } from "../utils/constants/content.constants.js";
 import type { Request, Response } from "express";
 
 const router = express.Router();
@@ -51,6 +52,46 @@ router.post("/create", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// get shareable link
+router.get("/get", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userCredentials = req.userCredentials;
+
+    // check if user exists
+    const user = await User.findById(userCredentials?.id);
+    if (!user) {
+      res
+        .status(401)
+        .json({ message: "Please sign in or create an account to continue" });
+      return;
+    }
+
+    // check if link is already shared
+    const link = await Link.findOne({ ownerId: user._id });
+    if (link) {
+      res.status(200).json({
+        message: "Successfully obtained a shareable link",
+        id: link._id,
+      });
+      return;
+    }
+
+    // error response
+    res.status(400).json({
+      message: `${user.username} doesn't have any active shareable link`,
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("Error message:", err.message);
+      res.status(400).json({ message: err.message });
+    } else {
+      console.error("Unknown error:", err);
+      res.status(400).json({ message: err });
+    }
+    return;
+  }
+});
+
 // get content of user to share
 router.get("/:linkId", async (req: Request, res: Response) => {
   try {
@@ -79,25 +120,46 @@ router.get("/:linkId", async (req: Request, res: Response) => {
       return;
     }
 
-    // get content
-    const contents = await Content.find({ ownerId: link?.ownerId }).populate(
-      "tagIds"
-    );
-    if (!contents) {
-      res.status(403).json({
-        message: "No contents found",
+    const type = req.query.type;
+
+    if (!type) {
+      // get content
+      const contents = await Content.find(
+        { ownerId: link?.ownerId },
+        "-__v"
+      ).populate({ path: "tagIds", select: "-_id -__v" });
+      if (!contents) {
+        res.status(403).json({
+          message: "No contents found",
+        });
+      }
+
+      // success response
+      res.status(200).json({
+        message: `Successfully retrieved all contents of ${user.username}`,
+        username: user.username,
+        contents,
       });
+      return;
+    }
+    if (typeof type === "string" && FILTER_CONTENT_TYPE[type]) {
+      // get filtered content
+      const contents = await Content.find(
+        { ownerId: link?.ownerId, type: FILTER_CONTENT_TYPE[type] },
+        "-__v -ownerId"
+      ).populate({ path: "tagIds", select: "-_id -__v" });
+
+      // success response
+      res
+        .status(200)
+        .json({ message: "Filtered contents have been received", contents });
+      return;
     }
 
-    // success response
-    const share = {
-      username: user.username,
-      contents: contents,
-    };
-    res.status(200).json({
-      message: `Successfully retrieved all contents of ${user.username}`,
-      share,
-    });
+    // error response
+    res
+      .status(400)
+      .json({ message: "Please provide a valid content type filter" });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("Er ror message:", err.message);
