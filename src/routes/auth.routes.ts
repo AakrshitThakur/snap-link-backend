@@ -51,8 +51,9 @@ router.post("/signup", async (req: Request, res: Response) => {
       .cookie("jwt", jwt, {
         httpOnly: true, // cannot be accessed by JS
         secure: process.env.NODE_ENV === "production", // true in production
-        sameSite: "strict", // CSRF protection
+        sameSite: "none", // CSRF protection
         maxAge: 6 * 3600000, // (6 * 1) hours
+        domain: "/", 
       })
       .status(200)
       .json({ message: `${newUser.username} has successfully signed up` });
@@ -99,8 +100,9 @@ router.post("/signin", async (req, res) => {
     res.cookie("jwt", jwt, {
       httpOnly: true, // cannot be accessed by JS
       secure: process.env.NODE_ENV === "production", // true in production
-      sameSite: "strict", // CSRF protection
+      sameSite: "none", // CSRF protection
       maxAge: 6 * 3600000, // (6 * 1) hours
+      domain: "/", 
     });
 
     res.status(200).json({ message: `welcome back ${user.username}` });
