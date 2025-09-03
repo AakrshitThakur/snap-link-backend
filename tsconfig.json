@@ -14,9 +14,9 @@
     // "types": ["node"],
     // and npm install -D @types/node
     // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    // "sourceMap": true,
+    // "declaration": true,
+    // "declarationMap": true,
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
@@ -37,12 +37,12 @@
     "skipLibCheck": true,
   },
   "include": [
-    "src/**/*.ts",
-    "api/**/*.ts"
+    "api/**/*.ts", 
+    "src/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "api"
-  ]
+  // "exclude": [
+  //   "node_modules",
+  //   "dist",
+  //   "api"
+  // ]
 }
