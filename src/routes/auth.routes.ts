@@ -53,7 +53,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         secure: process.env.NODE_ENV === "production", // true in production
         sameSite: "none", // CSRF protection
         maxAge: 6 * 3600000, // (6 * 1) hours
-        domain: "/", 
+        path: "/",
       })
       .status(200)
       .json({ message: `${newUser.username} has successfully signed up` });
@@ -102,7 +102,7 @@ router.post("/signin", async (req, res) => {
       secure: process.env.NODE_ENV === "production", // true in production
       sameSite: "none", // CSRF protection
       maxAge: 6 * 3600000, // (6 * 1) hours
-      domain: "/", 
+      path: "/",
     });
 
     res.status(200).json({ message: `welcome back ${user.username}` });
