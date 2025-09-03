@@ -40,4 +40,9 @@
     "src/**/*.ts",
     "api/**/*.ts"
   ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "api"
+  ]
 }
