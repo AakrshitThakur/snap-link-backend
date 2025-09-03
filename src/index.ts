@@ -32,3 +32,5 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.info("Server successfully running on port: " + port);
 });
+
+export default app;
