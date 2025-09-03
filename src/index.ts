@@ -27,10 +27,11 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/contents", contentRouter);
 app.use("/api/v1/links", linkRouter);
 
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
-  console.info("Server successfully running on port: " + port);
-});
+// app.listen(port, () => {
+//   console.info("Server successfully running on port: " + port);
+// });
 
+// Export the app instance for Vercel
 export default app;
