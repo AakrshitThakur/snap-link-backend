@@ -7,7 +7,7 @@ A MERN stack–based web application for organizing and storing your valuable li
 ## Schema
 
 <div align="center">  
-<img alt="Sign in page" src="https://github.com/AakrshitThakur/snap-link-backend/blob/main/public/images/snap-link-schema.png?raw=true" width="800" height="400"><br>  
+<img alt="Sign in page" src="https://github.com/AakrshitThakur/snap-link-backend/blob/main/public/images/snap-link-schema.png?raw=true" width="800" height="500"><br>  
 <sup>SnapLink Schema<sup>  
 </div>
 
@@ -32,7 +32,6 @@ your-project/
 &nbsp;| ├── custom-types/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All custom TypeScript types  
 &nbsp;| ├── db/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database related stuff  
 &nbsp;| ├── utils/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All utility functions  
-&nbsp;| ├── store/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# A global store  
 &nbsp;| ├── index&nbsp;&nbsp;&nbsp;&nbsp;# Main server file  
 ├── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Project documentation
 
@@ -48,5 +47,3 @@ cd snap-link-backend
 npm install
 # or
 yarn install```
-
-````
