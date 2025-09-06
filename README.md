@@ -23,19 +23,19 @@ A MERN stack–based web application for organizing and storing your valuable li
 
 ## Project Structure
 
-<div style="overflow-x: auto; white-space: pre;">
-your-project/  
-├── public/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Static files  
-├── src/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Application source code  
-&nbsp;| ├── models/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All models  
-&nbsp;| ├── middlewares/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All middleware  
-&nbsp;| ├── routes/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All express Router  
-&nbsp;| ├── custom-types/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All custom TypeScript types  
-&nbsp;| ├── db/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database related stuff  
-&nbsp;| ├── utils/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All utility functions  
-&nbsp;| ├── index&nbsp;&nbsp;&nbsp;&nbsp;# Main server file  
-├── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Project documentation  
-</div>
+<pre style="white-space: pre; overflow-x: auto;">
+your-project/
+├── public/          # Static files
+├── src/             # Application source code
+│   ├── models/      # All models
+│   ├── middlewares/ # All middleware
+│   ├── routes/      # All express Router
+│   ├── custom-types/# All custom TypeScript types
+│   ├── db/          # Database related stuff
+│   ├── utils/       # All utility functions
+│   ├── index        # Main server file
+├── README.md        # Project documentation
+</pre>
 
 ---
 
