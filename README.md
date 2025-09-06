@@ -23,6 +23,7 @@ A MERN stack–based web application for organizing and storing your valuable li
 
 ## Project Structure
 
+<div style="overflow-x: auto; white-space: nowrap;">
 your-project/  
 ├── public/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Static files  
 ├── src/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Application source code  
@@ -33,7 +34,8 @@ your-project/
 &nbsp;| ├── db/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database related stuff  
 &nbsp;| ├── utils/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# All utility functions  
 &nbsp;| ├── index&nbsp;&nbsp;&nbsp;&nbsp;# Main server file  
-├── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Project documentation
+├── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Project documentation  
+</div>
 
 ---
 
@@ -47,3 +49,4 @@ cd snap-link-backend
 npm install
 # or
 yarn install```
+````
