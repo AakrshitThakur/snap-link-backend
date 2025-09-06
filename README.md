@@ -23,7 +23,7 @@ A MERN stack–based web application for organizing and storing your valuable li
 
 ## Project Structure
 
-<div style="overflow-x: auto;">
+<div style="overflow-x: auto; white-space: pre;">
 your-project/  
 ├── public/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Static files  
 ├── src/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Application source code  
